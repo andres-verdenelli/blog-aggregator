@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/andres-verdenelli/blog-aggregator/issues"
   },
-  "homepage": "https://github.com/andres-verdenelli/blog-aggregator#readme"
+  "homepage": "https://github.com/andres-verdenelli/blog-aggregator#readme",
+  "devDependencies": {
+    "@types/node": "^24.0.4",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
 }
