@@ -1,4 +1,5 @@
 import { readConfig, setUser } from './config.js'
+import { createFeed, getAllFeeds } from './lib/db/queries/feeds.js'
 import {
   createUser,
   deleteAllUsers,
@@ -127,10 +128,32 @@ async function handleAggregator(cmdName: string, ...args: string[]) {
   console.dir(rssFeed, { depth: null })
 }
 
+async function handleAddFeed(cmdName: string, ...args: string[]) {
+  const name = args[0]
+  const url = args[1]
+  if (!name || !url) {
+    console.log('Missing args')
+    process.exit(1)
+  }
+  await createFeed(name, url)
+}
+
+async function handleFeeds(cmdName: string, ...args: string[]) {
+  const feeds = await getAllFeeds()
+  feeds?.forEach(feed => {
+    console.log(`📘 ${feed.feedName}`)
+    console.log(`🔗 ${feed.feedUrl}`)
+    console.log(`👤 ${feed.userName}`)
+    console.log('---')
+  })
+}
+
 registerCommand(registry, 'login', handlerLogin)
 registerCommand(registry, 'register', handleRegister)
 registerCommand(registry, 'reset', handleReset)
 registerCommand(registry, 'users', handleUsers)
 registerCommand(registry, 'agg', handleAggregator)
+registerCommand(registry, 'addfeed', handleAddFeed)
+registerCommand(registry, 'feeds', handleFeeds)
 
 main()
