@@ -1,4 +1,4 @@
-import { pgTable, timestamp, uuid, text } from 'drizzle-orm/pg-core'
+import { pgTable, timestamp, uuid, text, unique } from 'drizzle-orm/pg-core'
 
 const timestamps = {
   created_at: timestamp('created_at').notNull().defaultNow(),
@@ -23,3 +23,18 @@ export const feeds = pgTable('feeds', {
     .references(() => users.id, { onDelete: 'cascade' }),
   ...timestamps,
 })
+
+export const feed_follows = pgTable(
+  'feed_follows',
+  {
+    id: uuid('id').primaryKey().defaultRandom().notNull(),
+    user_id: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    feed_id: uuid('feed_id')
+      .notNull()
+      .references(() => feeds.id, { onDelete: 'cascade' }),
+    ...timestamps,
+  },
+  table => [unique().on(table.user_id, table.feed_id)]
+)
